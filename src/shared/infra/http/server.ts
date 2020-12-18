@@ -4,9 +4,11 @@ import express from 'express';
 import 'express-async-errors';
 import { resolve } from 'path';
 
-import '@shared/infra/typeorm';
 import GlobalError from '@shared/errors/GlobalError';
 import routes from './routes';
+
+import '@shared/infra/typeorm';
+import '@shared/container';
 
 const app = express();
 
