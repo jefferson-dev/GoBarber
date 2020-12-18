@@ -1,25 +1,10 @@
 import { Router } from 'express';
-import { container } from 'tsyringe';
 
-import CreateSessionService from '@users/services/CreateSession.services';
-
-import DeletePassword from '@users/mappers/DeletePassword.mappers';
+import SessionsController from '@modules/users/infra/http/controllers/SessionsController';
 
 const sessionRouter = Router();
+const sessionsController = new SessionsController();
 
-sessionRouter.post('/', async (request, response) => {
-  const { email, password } = request.body;
-
-  const createSessionService = container.resolve(CreateSessionService);
-
-  const { user, token } = await createSessionService.execute({
-    email,
-    password,
-  });
-
-  const userWithoutPassword = DeletePassword.toDTO(user);
-
-  return response.json({ user: userWithoutPassword, token });
-});
+sessionRouter.post('/', sessionsController.create);
 
 export default sessionRouter;
