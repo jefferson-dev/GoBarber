@@ -2,6 +2,7 @@ node_modules/
 buid/
 .idea/
 .vscode/
+yarn-error.log
 
 tmp/*
 !tmp/.gitkeep
