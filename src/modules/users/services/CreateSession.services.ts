@@ -1,11 +1,11 @@
-import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import IUsersRepository from '@users/repositories/IUsersRepository';
+import IHashProvider from '@users/providers/HashProvider/models/IHashProvider';
 
 import User from '@users/infra/typeorm/entities/User';
-import IUsersRepository from '@users/repositories/IUsersRepository';
 
 interface IRequest {
   email: string;
@@ -17,6 +17,7 @@ class CreateSessionService {
   constructor(
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({
@@ -28,7 +29,10 @@ class CreateSessionService {
       throw new AppError('Email/Password Invalido.');
     }
 
-    const checkPass = await compare(password, user.password);
+    const checkPass = await this.hashProvider.compareHash(
+      password,
+      user.password,
+    );
     if (!checkPass) {
       throw new AppError('Email/Password Invalido.');
     }

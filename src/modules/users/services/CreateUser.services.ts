@@ -1,10 +1,10 @@
-import { hash } from 'bcrypt';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import IUsersRepository from '@users/repositories/IUsersRepository';
+import IHashProvider from '@users/providers/HashProvider/models/IHashProvider';
 
 import User from '@users/infra/typeorm/entities/User';
-import IUsersRepository from '@users/repositories/IUsersRepository';
 
 interface IRequest {
   name: string;
@@ -17,6 +17,9 @@ class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({ name, email, password }: IRequest): Promise<User> {
@@ -25,7 +28,7 @@ class CreateUserService {
       throw new AppError('Email já cadastrado.');
     }
 
-    const encryptPass = await hash(password, 8);
+    const encryptPass = await this.hashProvider.generateHash(password);
 
     const user = await this.userRepository.create({
       name,
