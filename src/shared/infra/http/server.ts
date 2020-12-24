@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
 import express from 'express';
+import cors from 'cors';
 import 'express-async-errors';
 import { resolve } from 'path';
 
@@ -12,6 +13,9 @@ import '@shared/container';
 
 const app = express();
 
+app.use((req, res, next) => {
+  next();
+}, cors());
 app.use(express.json());
 app.use('/file', express.static(resolve(__dirname, '..', 'tmp')));
 app.use(routes);
