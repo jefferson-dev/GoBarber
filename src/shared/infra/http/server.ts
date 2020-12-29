@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import express from 'express';
 import cors from 'cors';
+import { errors } from 'celebrate';
 import 'express-async-errors';
 import { resolve } from 'path';
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use('/file', express.static(resolve(__dirname, '..', 'tmp')));
 app.use(routes);
+app.use(errors);
 app.use(GlobalError);
 
 app.listen(3333, () => {
