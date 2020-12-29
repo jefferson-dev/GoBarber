@@ -27,6 +27,7 @@
     "prettier/prettier": "error",
     "@typescript-eslint/camelcase": "off",
     "camelcase": "off",
+    "no-console":"off",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
     "import/no-extraneous-dependencies": "off",
