@@ -15,6 +15,8 @@ export default function GlobalError(
     });
   }
 
+  console.log(err);
+
   return response.status(500).json({
     status: 'Error',
     message: 'Internal Error Server.',
