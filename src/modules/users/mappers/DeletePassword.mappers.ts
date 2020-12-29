@@ -5,6 +5,8 @@ interface IUserDTO {
   name: string;
   email: string;
   avatar: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export default class DeletePassword {
@@ -14,6 +16,8 @@ export default class DeletePassword {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
     };
   }
 }
