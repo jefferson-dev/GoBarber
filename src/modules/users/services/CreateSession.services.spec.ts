@@ -2,27 +2,38 @@ import AppError from '@shared/errors/AppError';
 
 import FakeUsersRepository from '@users/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '@users/providers/HashProvider/fakes/FakeHashProvider';
-import CreateUser from './CreateUser.services';
+import CreateUserService from './CreateUser.services';
 import CreateSessionService from './CreateSession.services';
 
-describe('autheticatedUser', () => {
-  it('should be able to autheticate', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUserService: CreateUserService;
+let createSessionService: CreateSessionService;
 
-    const createUser = new CreateUser(fakeUsersRepository, fakeHashProvider);
-    const createSession = new CreateSessionService(
+describe('autheticatedUser', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
+    createUserService = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
 
-    const user = await createUser.execute({
+    createSessionService = new CreateSessionService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+  });
+
+  it('should be able to autheticate', async () => {
+    const user = await createUserService.execute({
       name: 'John Doe',
       email: 'johndoe@exemple.com',
       password: '123456',
     });
 
-    const response = await createSession.execute({
+    const response = await createSessionService.execute({
       email: 'johndoe@exemple.com',
       password: '123456',
     });
@@ -32,16 +43,8 @@ describe('autheticatedUser', () => {
   });
 
   it('should not be able to autheticate with exitting user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const createSession = new CreateSessionService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
-    expect(
-      createSession.execute({
+    await expect(
+      createSessionService.execute({
         email: 'johndoe@exemple.com',
         password: '123456',
       }),
@@ -49,23 +52,14 @@ describe('autheticatedUser', () => {
   });
 
   it('should not be able to authenticate with the invalid password', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const createUser = new CreateUser(fakeUsersRepository, fakeHashProvider);
-    const createSession = new CreateSessionService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
-    await createUser.execute({
+    await createUserService.execute({
       name: 'John Doe',
       email: 'johndoe@exemple.com',
       password: '123456',
     });
 
-    expect(
-      createSession.execute({
+    await expect(
+      createSessionService.execute({
         email: 'johndoe@exemple.com',
         password: '1234567',
       }),
