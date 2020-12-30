@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@users/services/CreateUser.services';
-
-import DeletePassword from '@users/mappers/DeletePassword.mappers';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -13,8 +12,6 @@ export default class UsersController {
 
     const user = await createUserService.execute({ name, email, password });
 
-    const userWithoutPassword = DeletePassword.toDTO(user);
-
-    return response.json(userWithoutPassword);
+    return response.json(classToClass(user));
   }
 }

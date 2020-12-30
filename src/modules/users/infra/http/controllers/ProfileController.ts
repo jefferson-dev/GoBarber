@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UpdateProfileService from '@users/services/UpdateProfile.services';
 import ShowProfileService from '@users/services/ShowProfile.services';
-
-import DeletePassword from '@users/mappers/DeletePassword.mappers';
 
 export default class ProfileController {
   public async show(request: Request, response: Response): Promise<Response> {
@@ -14,9 +13,7 @@ export default class ProfileController {
 
     const user = await showProfile.execute({ user_id });
 
-    const userWithoutPassword = DeletePassword.toDTO(user);
-
-    return response.json(userWithoutPassword);
+    return response.json(classToClass(user));
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
@@ -33,8 +30,6 @@ export default class ProfileController {
       password,
     });
 
-    const userWithoutPassword = DeletePassword.toDTO(user);
-
-    return response.json(userWithoutPassword);
+    return response.json(classToClass(user));
   }
 }

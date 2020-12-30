@@ -3,6 +3,8 @@ buid/
 .idea/
 .vscode/
 yarn-error.log
+.env
+ormconfig.json
 
 tmp/*
 !tmp/.gitkeep

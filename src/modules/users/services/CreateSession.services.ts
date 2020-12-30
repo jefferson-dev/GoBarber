@@ -1,6 +1,7 @@
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
+import authJWT from '@config/auth';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@users/repositories/IUsersRepository';
 import IHashProvider from '@users/providers/HashProvider/models/IHashProvider';
@@ -39,9 +40,9 @@ class CreateSessionService {
       throw new AppError('Email/Password Invalido.');
     }
 
-    const token = sign({}, 'teste', {
+    const token = sign({}, authJWT.jwt.secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn: authJWT.jwt.expiresIn,
     });
 
     return { user, token };

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
 import AppError from '@shared/errors/AppError';
+import authJWT from '@config/auth';
 
 interface ITokenPayload {
   iat: number;
@@ -23,7 +24,7 @@ export default function isAuthenticated(
   const [, token] = authorization.split(' ');
 
   try {
-    const decoded = verify(token, 'teste');
+    const decoded = verify(token, authJWT.jwt.secret);
 
     const { sub } = decoded as ITokenPayload;
 

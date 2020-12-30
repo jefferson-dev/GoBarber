@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateSessionService from '@users/services/CreateSession.services';
-
-import DeletePassword from '@users/mappers/DeletePassword.mappers';
 
 export default class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -16,8 +15,6 @@ export default class SessionsController {
       password,
     });
 
-    const userWithoutPassword = DeletePassword.toDTO(user);
-
-    return response.json({ user: userWithoutPassword, token });
+    return response.json({ user: classToClass(user), token });
   }
 }

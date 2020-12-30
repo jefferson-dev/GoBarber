@@ -3,8 +3,6 @@ import { container } from 'tsyringe';
 
 import ResetPasswordService from '@users/services/ResetPassword.services';
 
-// import DeletePassword from '@users/mappers/DeletePassword.mappers';
-
 export default class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { password, token } = request.body;
@@ -15,8 +13,6 @@ export default class SessionsController {
       password,
       token,
     });
-
-    // const userWithoutPassword = DeletePassword.toDTO(user);
 
     return response.status(204).json();
   }
