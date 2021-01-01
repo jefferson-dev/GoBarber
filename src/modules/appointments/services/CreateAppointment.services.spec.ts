@@ -2,20 +2,24 @@ import AppError from '@shared/errors/AppError';
 
 import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeAppointmentsRepository from '@appointments/repositories/fakes/FakeAppointmetsRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import CreateAppointmentService from './CreateAppointment.services';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let fakeNotificationsRepository: FakeNotificationsRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let createAppointment: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
     fakeNotificationsRepository = new FakeNotificationsRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
     createAppointment = new CreateAppointmentService(
       fakeAppointmentsRepository,
       fakeNotificationsRepository,
+      fakeCacheProvider,
     );
   });
 
@@ -40,14 +44,14 @@ describe('CreateAppointment', () => {
     });
 
     await createAppointment.execute({
-      date: new Date(2020, 11, 10, 13),
+      date: new Date(2020, 11, 10, 12),
       user_id: 'user_id',
       provider_id: 'provider_id',
     });
 
     await expect(
       createAppointment.execute({
-        date: new Date(2020, 11, 10, 13),
+        date: new Date(2020, 11, 10, 12),
         user_id: 'user_id',
         provider_id: 'provider_id',
       }),
@@ -75,7 +79,7 @@ describe('CreateAppointment', () => {
 
     await expect(
       createAppointment.execute({
-        date: new Date(2020, 11, 10, 11),
+        date: new Date(2020, 11, 10, 12),
         user_id: 'user_id',
         provider_id: 'user_id',
       }),

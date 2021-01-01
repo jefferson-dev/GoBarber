@@ -8,6 +8,7 @@ import 'express-async-errors';
 
 import GlobalError from '@shared/errors/GlobalError';
 import uploads from '@config/upload';
+import rateLimiter from '@shared/infra/http/Middlewares/rateLimiter';
 import routes from './routes';
 
 import '@shared/infra/typeorm';
@@ -18,6 +19,7 @@ const app = express();
 app.use((req, res, next) => {
   next();
 }, cors());
+app.use(rateLimiter);
 app.use(express.json());
 app.use('/files', express.static(uploads.uploadsFolder));
 app.use(routes);
