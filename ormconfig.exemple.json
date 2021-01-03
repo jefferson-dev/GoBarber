@@ -5,7 +5,7 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "e8d9s6e3",
+    "password": "password",
     "database": "app",
     "entities": [
        "src/modules/**/infra/typeorm/entities/*.ts"
